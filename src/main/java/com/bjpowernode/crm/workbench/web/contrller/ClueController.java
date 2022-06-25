@@ -31,12 +31,12 @@ public class ClueController extends HttpServlet {
 
         String path = request.getServletPath();
 
-        if ("/workbench/activity/getUserList.do".equals(path)){
+        if ("/workbench/clue/xxx.do".equals(path)){
 
-            //getUserList(request,response);
+            //xxx(request,response);
 
-        }else if ("/workbench/activity/save.do".equals(path)){
-            //save(request,response);
+        }else if ("/workbench/clue/xxxx.do".equals(path)){
+            //xxx(request,response);
         }
 
 

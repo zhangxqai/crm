@@ -10,6 +10,7 @@
     </welcome-file-list>
 
 
+    <!--过滤器-->
     <filter>
         <filter-name>EncodingFile</filter-name>
         <filter-class>com.bjpowernode.crm.web.fileter.EncodingFile</filter-class>
@@ -19,7 +20,7 @@
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
 
-
+    <!--过滤器-->
     <filter>
         <filter-name>LoginFilter</filter-name>
         <filter-class>com.bjpowernode.crm.web.fileter.LoginFilter</filter-class>
@@ -29,6 +30,11 @@
         <url-pattern>*.do</url-pattern>
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
+
+    <!--监听器-->
+    <listener>
+        <listener-class>com.bjpowernode.crm.web.listener.SysInitListener</listener-class>
+    </listener>
 
 
     <!--用户控制器-->
@@ -60,6 +66,15 @@
         <url-pattern>/workbench/activity/saveRemark.do</url-pattern>
         <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
 
+    </servlet-mapping>
+    <!--线索控制器-->
+    <servlet>
+        <servlet-name>ClueController</servlet-name>
+        <servlet-class>com.bjpowernode.crm.workbench.web.contrller.ClueController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClueController</servlet-name>
+        <url-pattern>/workbench/activity/xxx.do</url-pattern>
 
     </servlet-mapping>
 </web-app>
