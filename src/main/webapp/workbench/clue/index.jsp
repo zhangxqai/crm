@@ -23,8 +23,44 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function(){
-		
-		
+
+		//为创建按钮绑定事件
+		$("#addBtn").click(function (){
+			//需要获取所有者,需要走ajax
+			$.ajax({
+				url:"workbench/clue/getUserList.do",
+				type:"get",
+				dataType:"json",
+				success:function (data){
+					/*
+					* data
+					*     [{用户1}，{用户2}，。。，。。，。。，{用户3}]
+					* */
+					var html = "<option></option>";
+
+
+					$.each(data,function (i,n){
+
+						html += "<option value='"+n.id+"'>"+n.name+"</option>";
+
+					})
+
+					$("#create-owner").html(html);
+
+					//这个el表达式是登录的时候就已经存储好了
+					var id = "${user.id}";
+
+					//更改下拉框中 的默认值
+					$("#create-owner").val(id);
+
+					//处理完数据就打开模态窗口
+					$("#createClueModal").modal("show");
+
+				}
+			})
+
+		})
+
 		
 	});
 	
@@ -48,10 +84,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="form-group">
 							<label for="create-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-clueOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+								<select class="form-control" id="create-owner">
+
 								</select>
 							</div>
 							<label for="create-company" class="col-sm-2 control-label">公司<span style="font-size: 15px; color: red;">*</span></label>
@@ -447,7 +481,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 40px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createClueModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
