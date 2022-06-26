@@ -4,8 +4,127 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ClueDao">
-	
-	
+
+
+    <!--查询全部来列表的信息-->
+    <select id="getAllList" resultType="Clue">
+        select * from tbl_clue
+    </select>
+
+    <!--&lt;!&ndash;getClueByAll&ndash;&gt;
+    <select id="getClueByAll" resultType="Clue">
+
+        select c.id , c.fullname , c.company,c.phone,c.source,u.name as owner, c.mphone,c.state
+        from tbl_clue c
+        join tbl_user u
+        on u.id = c.owner
+        <where>
+            <if test="fullname != null and fullname !=''">
+                and c.fullname like concat('%',#{fullname},'%')
+            </if>
+            <if test="company != null and company !=''">
+                and c.company like concat('%',#{company},'%')
+            </if>
+            <if test="phone != null and phone !=''">
+                and c.phone like concat('%',#{phone},'%')
+            </if>
+            <if test="source != null and source !=''">
+                and c.source like concat('%',#{source},'%')
+            </if>
+            <if test="owner != null and owner !=''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+            <if test="mphone != null and mphone !=''">
+                and c.mphone like concat('%',#{mphone},'%')
+            </if>
+            <if test="state != null and state !=''">
+                and c.state like concat('%',#{state},'%')
+            </if>
+
+        </where>
+
+    </select>
+
+    <select id="getClueListCount" resultType="int">
+
+        select count(*)
+        from tbl_clue c
+        join tbl_user u
+        on u.id = c.owner
+        <where>
+            <if test="fullname != null and fullname !=''">
+                and c.fullname like concat('%',#{fullname},'%')
+            </if>
+            <if test="company != null and company !=''">
+                and c.company like concat('%',#{company},'%')
+            </if>
+            <if test="phone != null and phone !=''">
+                and c.phone like concat('%',#{phone},'%')
+            </if>
+            <if test="source != null and source !=''">
+                and c.source like concat('%',#{source},'%')
+            </if>
+            <if test="owner != null and owner !=''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+            <if test="mphone != null and mphone !=''">
+                and c.mphone like concat('%',#{mphone},'%')
+            </if>
+            <if test="state != null and state !=''">
+                and c.state like concat('%',#{state},'%')
+            </if>
+
+        </where>
+
+    </select>-->
+
+	<insert id="save" >
+        insert into tbl_clue(
+
+            id,
+            fullname,
+            appellation,
+            owner,
+            company,
+            job,
+            email,
+            phone,
+            website,
+            mphone,
+            state,
+            source,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+
+        )values (
+
+            #{id},
+            #{fullname},
+            #{appellation},
+            #{owner},
+            #{company},
+            #{job},
+            #{email},
+            #{phone},
+            #{website},
+            #{mphone},
+            #{state},
+            #{source},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+
+
+
+        )
+    </insert>
   	
 </mapper>
 
