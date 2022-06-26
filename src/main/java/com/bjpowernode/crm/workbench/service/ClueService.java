@@ -11,5 +11,13 @@ public interface ClueService {
 
     ClueVo<Clue> getClueList(Map<String, Object> map);
 
-    List<Clue> getAllList();
+    
+
+    Clue detail(String id);
+
+    Map<String, Object> getOneList(String id);
+
+    boolean update(Clue c);
+
+    ClueVo<Clue> getAllList(Map<String, Object> map);
 }

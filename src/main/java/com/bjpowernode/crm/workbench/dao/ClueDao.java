@@ -5,16 +5,23 @@ import com.bjpowernode.crm.workbench.domain.Clue;
 import java.util.List;
 import java.util.Map;
 
-public interface ClueDao {
+    public interface ClueDao {
 
 
     int save(Clue c);
 
-    List<Clue> getClueList();
 
     int getClueListCount();
 
     List<Clue> getClueByAll(Map<String, Object> map);
 
-    List<Clue> getAllList();
+    Clue detail(String id);
+
+    Clue getOneList(String id);
+
+    int update(Clue c);
+
+    List<Clue> getCluecondtion(Map<String, Object> map);
+
+    int getTotalListCount(Map<String, Object> map);
 }

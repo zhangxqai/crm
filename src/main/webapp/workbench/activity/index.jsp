@@ -274,6 +274,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						//返回什么数据，
 						//用户列表
+
 						//市场活动 对象
 
 						//{"uList" ：[{用户1}，{用户2}，{用户3 }]，“a” : {市场活动}}

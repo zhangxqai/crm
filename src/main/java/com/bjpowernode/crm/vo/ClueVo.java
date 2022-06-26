@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ClueVo<T> {
     private int total;
-    private List<T> ClueList;
+    private List<T> dataList;
 
     public int getTotal() {
         return total;
@@ -14,11 +14,11 @@ public class ClueVo<T> {
         this.total = total;
     }
 
-    public List<T> getClueList() {
-        return ClueList;
+    public List<T> getDataList() {
+        return dataList;
     }
 
-    public void setClueList(List<T> clueList) {
-        ClueList = clueList;
+    public void setDataList(List<T> dataList) {
+        this.dataList = dataList;
     }
 }

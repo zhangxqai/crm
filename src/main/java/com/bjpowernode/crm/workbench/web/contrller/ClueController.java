@@ -45,20 +45,171 @@ public class ClueController extends HttpServlet {
             getClueList(request,response);
         }else if ("/workbench/clue/getAllList.do".equals(path)){
             getAllList(request,response);
+        }else if ("/workbench/clue/detail.do".equals(path)){
+            detail(request,response);
+        }else if ("/workbench/clue/getOneList.do".equals(path)){
+            getOneList(request,response);
+        }else if ("/workbench/clue/update.do".equals(path)){
+            update(request,response);
         }
 
 
 
     }
 
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("线索列表添加操作");
+
+        //获取前端传过来的信息
+        String id = request.getParameter("id");
+        String fullname = request.getParameter("fullname");
+        String appellation = request.getParameter("appellation");
+        String owner = request.getParameter("owner");
+        String company = request.getParameter("company");
+        String job = request.getParameter("job");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String website = request.getParameter("website") ;
+        String mphone = request.getParameter("mphone");
+        String state = request.getParameter("state");
+        String source = request.getParameter("source");
+
+        String description = request.getParameter("description");
+        String contactSummary = request.getParameter("contactSummary");
+        String nextContactTime = request.getParameter("nextContactTime");
+        String address = request.getParameter("address");
+
+        //修改时间，获取当前时间
+        String editBy = DateTimeUtil.getSysTime();
+        //修改人是，当前登录的用户 ,通过获取session，再通过获取Attribute存的user拿到登录用户名
+        String editTime = ((User) request.getSession().getAttribute("user")).getName();
+
+        Clue c = new Clue();
+        c.setId(id);
+        c.setFullname(fullname);
+        c.setAppellation(appellation);
+        c.setOwner(owner);
+        c.setCompany(company);
+        c.setJob(job);
+        c.setEmail(email);
+        c.setPhone(phone);
+        c.setWebsite(website);
+        c.setMphone(mphone);
+        c.setState(state);
+        c.setSource(source);
+        c.setDescription(description);
+        c.setContactSummary(contactSummary);
+        c.setNextContactTime(nextContactTime);
+        c.setAddress(address);
+        c.setEditBy(editBy);
+        c.setEditTime(editTime);
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.update(c);
+
+        PrintJson.printJsonFlag(response,flag);
+
+
+
+    }
+
+    private void getOneList(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("修改列表需要查询");
+
+        String id = request.getParameter("id");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        Map<String,Object> map = cs.getOneList(id);
+
+        PrintJson.printJsonObj(response,map);
+
+
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("跳转到详细信息页");
+
+        String id = request.getParameter("id");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        Clue clue = cs.detail(id);
+
+        //转发的
+        request.setAttribute("clue",clue);
+
+        request.getRequestDispatcher("/workbench/clue/detail.jsp").forward(request,response);
+
+    }
+
     private void getAllList(HttpServletRequest request, HttpServletResponse response) {
 
         System.out.println("线索列表查询操作");
+        String pageNoStr = request.getParameter("pageNo");
+        String pageSizeStr = request.getParameter("pageSize");
+        String fullname = request.getParameter("fullname");
+        String company = request.getParameter("company");
+        String phone = request.getParameter("phone");
+        String source = request.getParameter("source");
+        String owner = request.getParameter("owner");
+        String mphone = request.getParameter("mphone");
+        String state = request.getParameter("state");
+
+
+        //由于字符串没有办法计算，要转换为数字
+        int pageNo = Integer.valueOf(pageNoStr);
+
+        //由于字符串没有办法计算，要转换为数字
+        int pageSize = Integer.valueOf(pageSizeStr);
+
+        //计算略过的记录数
+        int skipCount = (pageNo - 1) * pageSize;
+
+        //对这些数据封装起来传到service层
+        Map<String,Object> map = new HashMap<>();
+        map.put("fullname",fullname);
+        map.put("company",company);
+        map.put("phone",phone);
+        map.put("source",source);
+        map.put("owner",owner);
+        map.put("mphone",mphone);
+        map.put("state",state);
+        map.put("skipCount",skipCount);
+        map.put("pageSize",pageSize);
+
 
         ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
-        List<Clue> clueList = cs.getAllList();
 
-        PrintJson.printJsonObj(response,clueList);
+        /*
+        * 前端要，市场活动信息列表
+                查询的总条数
+
+                业务层拿到了以上两项信息之后，如果做返回
+                map：后期用到少的时候，就用这个方法
+
+                    map. put( "dataL ist":dataList)
+                    map. put("total ":total)
+                    PrintJSON map --> json
+                    {"total":100, "datalist":[{市场活动1},{2}, {3}]}
+
+
+                VO ：后期用到多的时候，就用这个方法
+
+                        PaginationVO<T>
+                        private int total;
+                        private List<T> datalist;
+
+                 分页查询，每一个模块都会有的选泽通用的Vo操作更方便
+
+        */
+        ClueVo<Clue> cListVo = cs.getAllList(map);
+
+        PrintJson.printJsonObj(response,cListVo);
+
 
 
     }
