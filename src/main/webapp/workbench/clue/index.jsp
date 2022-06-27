@@ -263,6 +263,60 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				})
 			})
 
+			//为保存按钮绑定事件，执行线索按钮的添加操作
+			$("#saveBtn").click(function (){
+
+				$.ajax({
+					url:"workbench/clue/save.do",
+					data:{
+
+						"fullname" :$.trim($("#create-fullname").val()),
+						"appellation" :$.trim($("#create-appellation").val()),
+						"owner" :$.trim($("#create-owner").val()),
+						"company" :$.trim($("#create-company").val()),
+						"job" :$.trim($("#create-job").val()),
+						"email" :$.trim($("#create-email").val()),
+						"phone" :$.trim($("#create-phone").val()),
+						"website" :$.trim($("#create-website").val()),
+						"mphone" :$.trim($("#create-mphone").val()),
+						"state" :$.trim($("#create-state").val()),
+						"source" :$.trim($("#create-source").val()),
+						"description" :$.trim($("#create-description").val()),
+						"contactSummary" :$.trim($("#create-contactSummary").val()),
+						"nextContactTime" :$.trim($("#create-nextContactTime").val()),
+						"address" :$.trim($("#create-address").val())
+
+					},
+					type:"post",
+					dataType:"json",
+					success:function (data){
+
+						/*
+                            data
+                                {"success" : true/false}
+
+                        * */
+						if (data.success){
+
+							//添加成功，
+							//添加成功之后，就要刷新列表
+							pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+							//刷新完了之后就要关闭窗口
+							$("#createClueModal").modal("hide");
+
+						}else {
+
+							//添加失败
+							alert("添加线索失败")
+						}
+
+					}
+				})
+
+
+			})
+
 			//为修改绑定事件，
 			$("#editBtn").click(function (){
 
