@@ -79,7 +79,7 @@
         from tbl_clue c
         join tbl_user u
         on u.id = c.owner
-        <!--<where>
+        <where>
             <if test="fullname != null and fullname !=''">
                 and c.fullname like concat('%',#{fullname},'%')
             </if>
@@ -100,7 +100,7 @@
             <if test="state != null and state !=''">
                 and c.state like concat('%',#{state},'%')
             </if>
-        </where>-->
+        </where>
             order by c.createTime desc
             limit #{skipCount},#{pageSize}
 

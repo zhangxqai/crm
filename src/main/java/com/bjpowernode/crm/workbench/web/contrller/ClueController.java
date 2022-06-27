@@ -207,7 +207,7 @@ public class ClueController extends HttpServlet {
 
         */
         ClueVo<Clue> cListVo = cs.getAllList(map);
-
+        System.out.println("执行了第一次");
         PrintJson.printJsonObj(response,cListVo);
 
 
