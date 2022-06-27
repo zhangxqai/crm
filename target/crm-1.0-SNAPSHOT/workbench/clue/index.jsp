@@ -399,7 +399,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			//为查询按钮绑定事件
 			$("#searchBtn").click(function (){
 
-				pageList(1,3);
+				/*<input type="hidden" id="hidden-fullname"/>
+					<input type="hidden" id="hidden-company"/>
+					<input type="hidden" id="hidden-phone"/>
+					<input type="hidden" id="hidden-source"/>
+					<input type="hidden" id="hidden-owner"/>
+					<input type="hidden" id="hidden-mphone"/>
+					<input type="hidden" id="hidden-state"/>
+					<input type="hidden" id="hidden-id"/>*/
+				//点击查询按钮的时候，应该将搜索框中的信息保存起来，并保存到隐藏域中
+				$("#hidden-fullname").val($.trim($("#search-fullname").val()));
+				$("#hidden-company").val($.trim($("#search-company").val()));
+				$("#hidden-phone").val($.trim($("#search-phone").val()));
+				$("#hidden-source").val($.trim($("#search-source").val()));
+				$("#hidden-owner").val($.trim($("#search-owner").val()));
+				$("#hidden-mphone").val($.trim($("#search-mphone").val()));
+				$("#hidden-state").val($.trim($("#search-state").val()));
+
+
+				pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
 			})
 
@@ -412,10 +430,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#qx").prop("checked",false);
 
 			//查询前，都要将隐藏域中保存的信息，重新再赋予到搜索框中
-			$("#search-name").val($.trim($("#hidden-name").val()));
+			/*
+			$("#hidden-fullname").val($.trim($("#edit-fullname").val()));
+				$("#hidden-company").val($.trim($("#edit-company").val()));
+				$("#hidden-phone").val($.trim($("#edit-phone").val()));
+				$("#hidden-source").val($.trim($("#edit-source").val()));
+				$("#hidden-owner").val($.trim($("#edit-owner").val()));
+				$("#hidden-mphone").val($.trim($("#edit-mphone").val()));
+				$("#hidden-state").val($.trim($("#edit-state").val()));
+				$("#hidden-id").val($.trim($("#edit-id").val()));
+*/
+			$("#search-fullname").val($.trim($("#hidden-fullname").val()));
+			$("#search-company").val($.trim($("#hidden-company").val()));
+			$("#search-phone").val($.trim($("#hidden-phone").val()));
+			$("#search-source").val($.trim($("#hidden-source").val()));
 			$("#search-owner").val($.trim($("#hidden-owner").val()));
-			$("#search-startDate").val($.trim($("#hidden-startDate").val()));
-			$("#search-endDate").val($.trim($("#hidden-endDate").val()));
+			$("#search-mphone").val($.trim($("#hidden-mphone").val()));
+			$("#search-state").val($.trim($("#hidden-state").val()));
+			$("#search-owner").val($.trim($("#hidden-owner").val()));
 
 			$.ajax({
 				url:"workbench/clue/getAllList.do",
@@ -546,6 +578,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </head>
 <body>
+
+	<input type="hidden" id="hidden-fullname"/>
+	<input type="hidden" id="hidden-company"/>
+	<input type="hidden" id="hidden-phone"/>
+	<input type="hidden" id="hidden-source"/>
+	<input type="hidden" id="hidden-owner"/>
+	<input type="hidden" id="hidden-mphone"/>
+	<input type="hidden" id="hidden-state"/>
 
 	<!-- 创建线索的模态窗口 -->
 	<div class="modal fade" id="createClueModal" role="dialog">
@@ -841,10 +881,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 		</div>
 	</div>
-	
-	
-	
-	
+
 	<%--<div>
 		<div style="position: relative; left: 10px; top: -10px;">
 			<div class="page-header">
@@ -1009,7 +1046,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</select>
 						</div>
 					</div>
-
 					<button type="button" class="btn btn-default" id="searchBtn">查询</button>
 
 				</form>
