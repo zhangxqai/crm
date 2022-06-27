@@ -177,6 +177,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			$("#qx").prop("checked",$("input[name=xz]").length == $("input[name=xz]:checked").length);
 
+
 		})
 
 		//为删除按钮绑定事件，执行市场活动删除操作

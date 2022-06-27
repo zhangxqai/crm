@@ -392,6 +392,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			})
 
+
 			//进入线索页面，刷新列表
 			pageList(1,3);
 
@@ -420,6 +421,31 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
 			})
+
+
+			//为全选选框绑定全选按钮
+			$("#qx").click(function (){
+
+
+				$("input[name=xz]").prop("checked",this.checked);
+
+
+			})
+
+			//为选框中全部不选的
+			/*
+				* 动态生成的元素，我们要以on方法的形式来触发事件
+			语法:
+			$(需要绑定元素的有效的外层元素). on(绑定事件的方式，需要绑定的元素的jquery对象,回调函
+
+			* */
+			$("#clueBody").on("click",$("input[name=xz]"),function (){
+
+				$("#qx").prop("checked",$("input[name=xz]").length == $("input[name=xz]:checked").length);
+
+			})
+
+
 
 		});
 
