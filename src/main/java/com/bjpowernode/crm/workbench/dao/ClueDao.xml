@@ -5,6 +5,14 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ClueDao">
 
+    <!--删除数据-->
+    <delete id="delete" parameterType="int">
+        delete from tbl_clue
+        where id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 
     <!--修改数据-->
     <update id="update">

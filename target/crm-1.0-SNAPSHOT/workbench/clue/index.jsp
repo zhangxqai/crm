@@ -446,6 +446,63 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			})
 
+			//为删除绑定事件
+			$("#deleteBtn").click(function (){
+
+				//获取有多少个选框
+				var $xz = $("input[name=xz]:checked");
+
+				//当这个$xz没有选中的时候
+				if ($xz.length == 0){
+
+					alert("请选择需要删除的数据");
+				}else {
+
+					if(confirm("确认删除吗")){
+
+						var param = "";
+						//当有了选中的选框就要循环出来，获取要删除的id值
+						for(var i = 0 ; i < $xz.length ; i++){
+
+							param += "id=" + $($xz[i]).val();
+
+							if(i < $xz.length-1){
+
+								param += "&";
+
+							}
+
+						}
+
+
+						//获取好了这些数据之后直接发送给ajax请求
+						$.ajax({
+							url:"workbench/clue/delete.do",
+							data: param,
+							type:"get",
+							dataType:"json",
+							success:function (data){
+
+								//判断是否删除成功
+								if (data.success){
+
+									//删除成功，之后就要刷新页面
+									pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+
+								}else {
+
+									//删除失败
+									alert("数据删除失败");
+								}
+							}
+						})
+					}
+
+
+				}
+			})
+
 
 			//进入线索页面，刷新列表
 			pageList(1,3);
@@ -1134,7 +1191,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 				

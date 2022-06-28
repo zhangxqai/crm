@@ -51,9 +51,25 @@ public class ClueController extends HttpServlet {
             getOneList(request,response);
         }else if ("/workbench/clue/update.do".equals(path)){
             update(request,response);
+        }else if ("/workbench/clue/delete.do".equals(path)){
+            delete(request,response);
         }
 
 
+
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("进入到删除数据的操作");
+
+        String[] id = request.getParameterValues("id");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.delete(id);
+
+        PrintJson.printJsonFlag(response,flag);
 
     }
 

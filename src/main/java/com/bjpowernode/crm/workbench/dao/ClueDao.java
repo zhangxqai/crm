@@ -24,4 +24,6 @@ import java.util.Map;
     List<Clue> getCluecondtion(Map<String, Object> map);
 
     int getTotalListCount(Map<String, Object> map);
-}
+
+        int delete(String[] id);
+    }

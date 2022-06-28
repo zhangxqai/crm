@@ -100,5 +100,18 @@ public class ClueServiceImpl implements ClueService {
         return vo;
     }
 
+    @Override
+    public boolean delete(String[] id) {
+        boolean flag = true;
+
+        int count = clueDao.delete(id);
+
+        if (count != 1 ) {
+
+            flag = false;
+        }
+        return flag;
+    }
+
 
 }

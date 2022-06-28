@@ -20,4 +20,6 @@ public interface ClueService {
     boolean update(Clue c);
 
     ClueVo<Clue> getAllList(Map<String, Object> map);
+
+    boolean delete(String[] id);
 }
