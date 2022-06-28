@@ -6,7 +6,9 @@ import com.bjpowernode.crm.util.ServiceFactory;
 import com.bjpowernode.crm.util.SqlSessionUtil;
 import com.bjpowernode.crm.vo.ClueVo;
 import com.bjpowernode.crm.workbench.dao.ClueDao;
+import com.bjpowernode.crm.workbench.dao.ClueRemarkDao;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.domain.ClueRemark;
 import com.bjpowernode.crm.workbench.service.ClueService;
 
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class ClueServiceImpl implements ClueService {
 
     private ClueDao clueDao = SqlSessionUtil.getSqlSession().getMapper(ClueDao.class);
     private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
+    private ClueRemarkDao clueRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ClueRemarkDao.class);
 
     @Override
     public boolean save(Clue c) {
@@ -49,6 +52,7 @@ public class ClueServiceImpl implements ClueService {
     public Clue detail(String id) {
 
         Clue clue = clueDao.detail(id);
+
         return clue;
     }
 
@@ -102,7 +106,11 @@ public class ClueServiceImpl implements ClueService {
 
     @Override
     public boolean delete(String[] id) {
+
         boolean flag = true;
+
+        //查询出需要删除多少条数据
+        
 
         int count = clueDao.delete(id);
 
@@ -111,6 +119,15 @@ public class ClueServiceImpl implements ClueService {
             flag = false;
         }
         return flag;
+    }
+
+    @Override
+    public List<ClueRemark> getRemarks(String id) {
+
+        List<ClueRemark> clueRemarks = clueRemarkDao.getRemarks(id);
+
+
+        return clueRemarks;
     }
 
 

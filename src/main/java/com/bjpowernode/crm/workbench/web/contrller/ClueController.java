@@ -12,6 +12,7 @@ import com.bjpowernode.crm.vo.PaginationVo;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.domain.ClueRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.bjpowernode.crm.workbench.service.Impl.ActivityServiceImpl;
@@ -53,9 +54,26 @@ public class ClueController extends HttpServlet {
             update(request,response);
         }else if ("/workbench/clue/delete.do".equals(path)){
             delete(request,response);
+        }else if ("/workbench/clue/getRemarks.do".equals(path)){
+            getRemarks(request,response);
         }
 
 
+
+    }
+
+    private void getRemarks(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("进入到clue备注表中");
+
+        String id = request.getParameter("clueid");
+
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        List<ClueRemark> clueRemarkList = cs.getRemarks(id);
+
+        PrintJson.printJsonObj(response,clueRemarkList);
 
     }
 
