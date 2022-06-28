@@ -7,4 +7,6 @@ import java.util.List;
 public interface ClueRemarkDao {
 
     List<ClueRemark> getRemarks(String id);
+
+    int saveRemark(ClueRemark cr);
 }

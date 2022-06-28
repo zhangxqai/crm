@@ -56,8 +56,47 @@ public class ClueController extends HttpServlet {
             delete(request,response);
         }else if ("/workbench/clue/getRemarks.do".equals(path)){
             getRemarks(request,response);
+        }else if ("/workbench/clue/saveRemarks.do".equals(path)){
+            saveRemarks(request,response);
         }
 
+
+
+    }
+
+    private void saveRemarks(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("进入保存备注信息的操作");
+
+        String notContent = request.getParameter("notContent");
+        String clueId = request.getParameter("clueId");
+
+        //之后还要生成一个id，一个创建人，一个创建时间
+        String id = UUIDUtil.getUUID();
+        //创建时间，获取当前时间
+        String createTime = DateTimeUtil.getSysTime();
+        //创建人是，当前登录的用户 ,通过获取session，再通过获取Attribute存的user拿到登录用户名
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        String editFlag = "0";
+
+
+        //将这些信息封装到ClueRemark对象中
+        ClueRemark cr = new ClueRemark();
+        cr.setId(id);
+        cr.setNoteContent(notContent);
+        cr.setClueId(clueId);
+        cr.setCreateTime(createTime);
+        cr.setCreateBy(createBy);
+        cr.setEditFlag(editFlag);
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        boolean flag = cs.saveRemark(cr);
+
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("success",flag);
+        map.put("clue",cr);
+        PrintJson.printJsonObj(response,map);
 
 
     }

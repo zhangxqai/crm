@@ -59,27 +59,62 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		//页面加载完毕之后显示备注信息
 		showClueRemark();
 
+
+		//这个是为了备注后面有修改和删除按钮添加的信息，复制放在这个位置上了之后，就要再备注上的div中，添加一个remarkBody的id，
+		//还需要在备注信息上的颜色进行更改
+		$("#remarkBody").on("mouseover",".remarkDiv",function(){
+			$(this).children("div").children("div").show();
+		})
+		$("#remarkBody").on("mouseout",".remarkDiv",function(){
+			$(this).children("div").children("div").hide();
+		})
+
 		//为备注保存绑定事件
 		$("#saveClueRemarkBtn").click(function (){
 
-			//先获取div中的数据
-
-			var Text = $.trim($("#remark").val());
 
 			$.ajax({
-				url:"",
+				url:"workbench/clue/saveRemarks.do",
 				data:{
-					"notContent":Text,
+					"notContent": $.trim($("#remark").val()),
+
 					"clueId" : "${clue.id}"
 				},
-				type:"",
+				type:"post",
 				dataType:"json",
 				success:function (data){
 
 					//判断保存成功没有
 					if(data.success){
 
-						//保存成功
+
+
+						/*
+							data
+								一个是success ：true/false
+								一个是clue：{“xxx”:"xxx"},{},...,{}
+						*/
+						//保存成功，就要再添加div上次加上一条信息
+						var html = "";
+
+						html += '<div class="remarkDiv" style="height: 60px;">';
+						html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+						html += '<div style="position: relative; top: -40px; left: 40px;" >';
+						html += '<h5>'+data.clue.noteContent+'</h5>';
+						html += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;"> '+(data.clue.createTime)+' 由'+(data.clue.createBy)+'</small>';
+						html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+						html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ffffff;"></span></a>';
+						html += '&nbsp;&nbsp;&nbsp;&nbsp;';
+						html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+						html += '</div>';
+						html += '</div>';
+						html += '</div>';
+
+						//拼接好了之后就要放在添加列表的div上方
+						$("#remarkDiv").before(html);
+
+
+						$("#remark").val("");
 
 
 					}else {
@@ -120,9 +155,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					param += '<h5>'+n.noteContent+'</h5>';
 					param += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.edtiTime)+' 由'+(n.editFlag==0?n.createBy:n.edtiBy)+'</small>';
 					param += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '&nbsp;&nbsp;&nbsp;&nbsp;';
-					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '</div>';
 					param += '</div>';
 					param += '</div>';
@@ -457,7 +492,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 40px; left: 40px;">
+	<div id="remarkBody" style="position: relative; top: 40px; left: 40px;">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>

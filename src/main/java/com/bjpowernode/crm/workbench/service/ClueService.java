@@ -25,4 +25,6 @@ public interface ClueService {
     boolean delete(String[] id);
 
     List<ClueRemark> getRemarks(String id);
+
+    boolean saveRemark(ClueRemark cr);
 }

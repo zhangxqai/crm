@@ -5,6 +5,28 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ClueRemarkDao">
 
+    <!--保存备注信息saveRemark-->
+    <insert id="saveRemark">
+        insert into tbl_clue_remark(
+
+            id,
+            noteContent,
+            createBy,
+            createTime,
+            editFlag,
+            clueId
+
+        )values (
+
+            #{id},
+            #{noteContent},
+            #{createBy},
+            #{createTime},
+            #{editFlag},
+            #{clueId}
+        )
+    </insert>
+
     <!--查询备注信息的getRemarks-->
     <select id="getRemarks" resultType="ClueRemark">
         select * from tbl_clue_remark where clueId = #{clueId}
