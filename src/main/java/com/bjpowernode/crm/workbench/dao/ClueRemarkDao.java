@@ -9,4 +9,10 @@ public interface ClueRemarkDao {
     List<ClueRemark> getRemarks(String id);
 
     int saveRemark(ClueRemark cr);
+
+    int getCountByid(String[] id);
+
+    int deleteRemarkById(String[] id);
+
+    int deleteRemark(String id);
 }

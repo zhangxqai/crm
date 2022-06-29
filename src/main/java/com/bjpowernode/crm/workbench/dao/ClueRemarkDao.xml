@@ -5,6 +5,32 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ClueRemarkDao">
 
+    <!--在备注信息后面删除的备注信息deleteRemark-->
+    <delete id="deleteRemark">
+        delete from tbl_clue_remark where id = #{id}
+    </delete>
+
+    <!--删除备注信息deleteRemarkById-->
+    <delete id="deleteRemarkById">
+        delete from tbl_clue_remark
+        where clueId in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--查询需要这个数据中有多少条记录getCountByid-->
+    <select id="getCountByid" resultType="int">
+
+        select count(*)
+        from tbl_clue_remark
+        where clueId in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </select>
+
     <!--保存备注信息saveRemark-->
     <insert id="saveRemark">
         insert into tbl_clue_remark(

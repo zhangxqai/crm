@@ -58,9 +58,25 @@ public class ClueController extends HttpServlet {
             getRemarks(request,response);
         }else if ("/workbench/clue/saveRemarks.do".equals(path)){
             saveRemarks(request,response);
+        }else if ("/workbench/clue/deleteRemark.do".equals(path)){
+            deleteRemark(request,response);
         }
 
 
+
+    }
+
+    private void deleteRemark(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("进入到备注删除操作");
+
+        String id = request.getParameter("id");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.deleteRemark(id);
+
+        PrintJson.printJsonFlag(response,flag);
 
     }
 

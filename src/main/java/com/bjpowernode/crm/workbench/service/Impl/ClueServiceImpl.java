@@ -109,12 +109,22 @@ public class ClueServiceImpl implements ClueService {
 
         boolean flag = true;
 
-        //查询出需要删除多少条数据
-        
+        //查询出备注需要删除多少条数据
+        int count = clueRemarkDao.getCountByid(id);
 
-        int count = clueDao.delete(id);
+        //删除备注，返回受到影响的条数
+        int count1 = clueRemarkDao.deleteRemarkById(id);
 
-        if (count != 1 ) {
+        if (count != count1){
+
+            flag = false;
+
+        }
+
+        //删除线索信息，返回受到影响的条数
+        int count2 = clueDao.delete(id);
+
+        if (count2 != id.length ) {
 
             flag = false;
         }
@@ -138,6 +148,22 @@ public class ClueServiceImpl implements ClueService {
         int count = clueRemarkDao.saveRemark(cr);
 
         if (count != 1 ){
+
+            flag = false;
+
+        }
+
+        return flag;
+    }
+
+    @Override
+    public boolean deleteRemark(String id) {
+
+        boolean flag = true;
+
+        int count = clueRemarkDao.deleteRemark(id);
+
+        if (count != 1){
 
             flag = false;
 

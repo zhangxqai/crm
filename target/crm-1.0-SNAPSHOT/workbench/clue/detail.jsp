@@ -97,15 +97,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						//保存成功，就要再添加div上次加上一条信息
 						var html = "";
 
-						html += '<div class="remarkDiv" style="height: 60px;">';
+						html += '<div id="'+data.clue.id+'" class="remarkDiv" style="height: 60px;">';
 						html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 						html += '<div style="position: relative; top: -40px; left: 40px;" >';
 						html += '<h5>'+data.clue.noteContent+'</h5>';
 						html += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;"> '+(data.clue.createTime)+' 由'+(data.clue.createBy)+'</small>';
 						html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-						html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ffffff;"></span></a>';
+						html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #e00000;"></span></a>';
 						html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-						html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+						html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+data.clue.id+'\')" ><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
 						html += '</div>';
 						html += '</div>';
 						html += '</div>';
@@ -130,6 +130,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 	});
+
+	//为备注删除绑定事件
+	function deleteRemark(id){
+
+		//alert(id)
+		$.ajax({
+			url:"workbench/clue/deleteRemark.do",
+			data:{
+				"id" : id
+			},
+			type:"get",
+			dataType:"json",
+			success:function (data){
+
+				//判断返回是有没有删除成功
+				if (data.success){
+
+					//删除成功,不需要刷新列表，直接删除这个id的记录就可以了
+					$("#"+id).remove();
+					
+
+				}else {
+
+					//删除失败
+					alert("删除备注信息失败");
+				}
+
+			}
+		})
+
+	}
 
 	function showClueRemark(){
 
@@ -157,7 +188,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					param += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
 					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '&nbsp;&nbsp;&nbsp;&nbsp;';
-					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
+					param += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')" ><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '</div>';
 					param += '</div>';
 					param += '</div>';
