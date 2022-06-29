@@ -100,10 +100,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						html += '<div id="'+data.clue.id+'" class="remarkDiv" style="height: 60px;">';
 						html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 						html += '<div style="position: relative; top: -40px; left: 40px;" >';
-						html += '<h5>'+data.clue.noteContent+'</h5>';
-						html += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;"> '+(data.clue.createTime)+' 由'+(data.clue.createBy)+'</small>';
+						html += '<h5 id="c'+data.clue.id+'">'+data.clue.noteContent+'</h5>';
+						html += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;" id="s'+data.clue.id+'"> '+(data.clue.createTime)+' 由'+(data.clue.createBy)+'</small>';
 						html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-						html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #e00000;"></span></a>';
+						html += '<a class="myHref" href="javascript:void(0);" onclick="edtaRemark(\''+data.clue.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #e00000;"></span></a>';
 						html += '&nbsp;&nbsp;&nbsp;&nbsp;';
 						html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+data.clue.id+'\')" ><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
 						html += '</div>';
@@ -128,8 +128,75 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 
+		//为修改备注的更新按钮，绑定事件
+		$("#updateBtn").click(function (){
+
+
+			//先获取这个需要更新的id，在隐藏域中获取
+			var id = $("#remarkId").val();
+
+            $.ajax({
+                url:"workbench/clue/updateClueRemark.do",
+                data:{
+                    "id" : id,
+                    "noteContent" : $.trim($("#neirong").val())
+                },
+                type:"post",
+                dataType:"json",
+                success:function (data){
+
+                    /*
+                        data
+                            [{"success" : true/false},"ClueRemark" ：【{}，{}，。。。，{}】]
+
+                    * */
+                    if(data.success){
+
+                        //修改成功需要在后面刷新一下这个id下的信息
+                        $("#c"+id).html(data.cList.noteContent);
+                        $("#s"+id).html((data.cList.editTime)+'由'+(data.cList.editBy));
+
+                        //之后在关闭模态窗口
+                        $("#editRemarkModa").modal("hide");
+
+                    }else {
+
+                        //修改失败
+                        alert("修改备注信息失败");
+                    }
+
+
+                }
+
+            })
+
+
+		})
+
 
 	});
+
+	//为备注的添加绑定事件
+	function edtaRemark(id){
+
+
+		//打开前需要获取这个id
+		$("#remarkId").val(id);
+
+		//先获取到文本框中的id中的val值
+		//$("#neirong").val($("#clue"+id).val());
+
+		var neirong = $("#c"+id).html();
+
+		$("#neirong").val(neirong);
+
+		//打开添加备注信息的模态窗口
+		$("#editRemarkModa").modal("show");
+
+
+	}
+
+
 
 	//为备注删除绑定事件
 	function deleteRemark(id){
@@ -149,7 +216,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 					//删除成功,不需要刷新列表，直接删除这个id的记录就可以了
 					$("#"+id).remove();
-					
+
 
 				}else {
 
@@ -183,10 +250,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					param += '<div class="remarkDiv" style="height: 60px;">';
 					param += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					param += '<div style="position: relative; top: -40px; left: 40px;" >';
-					param += '<h5>'+n.noteContent+'</h5>';
-					param += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.edtiTime)+' 由'+(n.editFlag==0?n.createBy:n.edtiBy)+'</small>';
+					param += '<h5 id="c'+n.id+'">'+n.noteContent+'</h5>';
+					param += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}</b> <small style="color: gray;" id="s'+n.id+'"> '+(n.editFlag==0?n.createTime:n.edtiTime)+' 由'+(n.editFlag==0?n.createBy:n.edtiBy)+'</small>';
 					param += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					param += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ff0000;"></span></a>';
+					param += '<a class="myHref" href="javascript:void(0);" onclick="edtaRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '&nbsp;&nbsp;&nbsp;&nbsp;';
 					param += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')" ><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '</div>';
@@ -206,6 +273,68 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 </head>
 <body>
+
+<!-- 修改市场活动备注的模态窗口 -->
+<div class="modal fade" id="editRemarkModa" role="dialog">
+	<%-- 备注的id --%>
+	<input type="hidden" id="remarkId">
+	<div class="modal-dialog" role="document" style="width: 40%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLab">修改备注</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="edit-describe" class="col-sm-2 control-label">内容</label>
+						<div class="col-sm-10" style="width: 81%;">
+							<textarea class="form-control" rows="3" id="neirong"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" id="updateBtn">更新</button>
+			</div>
+		</div>
+	</div>
+</div>
+<%--
+
+<!-- 修改市场活动备注的模态窗口 -->
+<div class="modal fade" id="editRemarkModal" role="dialog">
+	&lt;%&ndash; 备注的id &ndash;%&gt;
+	<input type="hidden" id="remarkId">
+	<div class="modal-dialog" role="document" style="width: 40%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabe">修改备注</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="edit-describe" class="col-sm-2 control-label">内容</label>
+						<div class="col-sm-10" style="width: 81%;">
+							<textarea class="form-control" rows="3" id="CluenoteContent"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" id="updateRemarkBtn">更新</button>
+			</div>
+		</div>
+	</div>
+</div>
+--%>
 
 	<!-- 关联市场活动的模态窗口 -->
 	<div class="modal fade" id="bundModal" role="dialog">

@@ -5,6 +5,20 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ClueRemarkDao">
 
+    <!--为修改备注信息updateClueRemark-->
+    <update id="updateClueRemark" >
+
+        update tbl_clue_remark set
+
+            noteContent = #{noteContent},
+            editBy = #{editBy},
+            editTime = #{editTime},
+            editFlag = #{editFlag}
+
+        where id = #{id}
+
+    </update>
+
     <!--在备注信息后面删除的备注信息deleteRemark-->
     <delete id="deleteRemark">
         delete from tbl_clue_remark where id = #{id}

@@ -130,7 +130,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 
-		//为更新按钮绑定事件
+		//为备注更新按钮绑定事件
 		$("#updateRemarkBtn").click(function (){
 
 			//获取id，并传值到数据库中，不然不知道要改那条数据

@@ -29,4 +29,6 @@ public interface ClueService {
     boolean saveRemark(ClueRemark cr);
 
     boolean deleteRemark(String id);
+
+    boolean updateClueRemark(ClueRemark clueRemark);
 }

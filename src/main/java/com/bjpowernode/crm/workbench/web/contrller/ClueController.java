@@ -60,7 +60,42 @@ public class ClueController extends HttpServlet {
             saveRemarks(request,response);
         }else if ("/workbench/clue/deleteRemark.do".equals(path)){
             deleteRemark(request,response);
+        }else if ("/workbench/clue/updateClueRemark.do".equals(path)){
+            updateClueRemark(request,response);
         }
+
+
+
+    }
+
+    private void updateClueRemark(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("进入线索备注修改操作");
+
+        String id = request.getParameter("id");
+        String noteContent = request.getParameter("noteContent");
+
+        //创建时间，获取当前时间
+        String editTime = DateTimeUtil.getSysTime();
+        //创建人是，当前登录的用户 ,通过获取session，再通过获取Attribute存的user拿到登录用户名
+        String editBy = ((User) request.getSession().getAttribute("user")).getName();
+        String editFlag = "1";
+
+        ClueRemark clueRemark = new ClueRemark();
+        clueRemark.setId(id);
+        clueRemark.setEditFlag(editFlag);
+        clueRemark.setEditBy(editBy);
+        clueRemark.setEditTime(editTime);
+        clueRemark.setNoteContent(noteContent);
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.updateClueRemark(clueRemark);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("success",flag);
+        map.put("cList",clueRemark);
+        PrintJson.printJsonObj(response,map);
 
 
 
