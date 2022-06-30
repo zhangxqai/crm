@@ -86,6 +86,10 @@
         <url-pattern>/workbench/clue/saveRemarks.do</url-pattern>
         <url-pattern>/workbench/clue/deleteRemark.do</url-pattern>
         <url-pattern>/workbench/clue/updateClueRemark.do</url-pattern>
+        <url-pattern>/workbench/clue/getActivityListByClueId.do</url-pattern>
+        <url-pattern>/workbench/clue/unbund.do</url-pattern>
+        <url-pattern>/workbench/clue/getActivityListByNameAndByClueId.do</url-pattern>
+        <url-pattern>/workbench/clue/bund.do</url-pattern>
 
     </servlet-mapping>
 </web-app>

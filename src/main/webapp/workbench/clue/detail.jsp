@@ -59,6 +59,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		//页面加载完毕之后显示备注信息
 		showClueRemark();
 
+		//页面加载完毕之后显示市场活动
+		showActivityList();
+
 
 		//这个是为了备注后面有修改和删除按钮添加的信息，复制放在这个位置上了之后，就要再备注上的div中，添加一个remarkBody的id，
 		//还需要在备注信息上的颜色进行更改
@@ -128,6 +131,105 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 
+		//为关联绑定添加操作
+		$("#bundBtn").click(function (){
+
+			var $xz = $("input[name=xz]:checked");
+
+			if ($xz.length == 0) {
+
+				alert("请选择需要关联的数据");
+			}else {
+				//到了这个必然是选中了一条或者多条
+				var param = "cid=${clue.id}&";
+
+				for (var i = 0 ;i < $xz.length ; i++){
+
+					param += "aid=" + $($xz[i]).val();
+
+					if (i < $xz.length -1){
+
+						param += "&";
+					}
+				}
+
+				$.ajax({
+					url:"workbench/clue/bund.do",
+					data:param,
+					type:"post",
+					dataType:"json",
+					success:function (data){
+
+						//data {success:true/false}
+						if (data.success){
+
+							//关联成功之后就要刷新列表
+							showActivityList();
+
+							//清除搜索框中的信息
+
+							//全选的按钮也要去除,这个可以在刷新列表的时候去掉
+
+							//关闭模态窗口
+							$("#bundModal").modal("hide");
+
+
+						}else {
+							alert("关联市场活动失败")
+						}
+
+					}
+				})
+
+			}
+
+
+		})
+
+
+		//为关联市场活动中的搜索框绑定事件，触发回车键，查询并展现市场活动列表
+		$("#aname").keydown(function (event){
+
+			if(event.keyCode == 13) {
+
+				//alert("cx");
+				$.ajax({
+					url:"workbench/clue/getActivityListByNameAndByClueId.do",
+					data:{
+						"aname" : $.trim($("#aname").val()),
+						"clueId" : "${clue.id}"
+					},
+					type:"get",
+					dataType:"json",
+					success:function (data){
+
+						//data [{市场活动1}，{市场活动2}，{市场活动3}]
+						var html = "";
+
+						$.each(data,function (i,n){
+
+							html += '<tr>';
+							html += '<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
+							html += '<td>'+n.name+'</td>';
+							html += '<td>'+n.startDate+'</td>';
+							html += '<td>'+n.endDate+'</td>';
+							html += '<td>'+n.owner+'</td>';
+							html += '</tr>';
+						})
+
+						$("#caBody").html(html);
+
+					}
+				})
+
+				//展现列表之后，需要将模态窗口中的默认回车键禁用
+				return false;
+
+			}
+
+		})
+
+
 		//为修改备注的更新按钮，绑定事件
 		$("#updateBtn").click(function (){
 
@@ -173,8 +275,77 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 
-
 	});
+
+	//页面加载完毕之后显示市场活动
+	function showActivityList(){
+
+
+		//去掉全选按钮
+
+
+		$.ajax({
+			url:"workbench/clue/getActivityListByClueId.do",
+			data:{
+
+				"clueId" : "${clue.id}"
+
+			},
+			type:"get",
+			dataType:"json",
+			success:function (data){
+
+				//data , [{市场列表}，{}，。。。，{}]
+				var html = "";
+
+				$.each(data,function (i,n){
+
+					html += '<tr>';
+					html += '<td>'+n.name+'</td>';
+					html += '<td>'+n.startDate+'</td>';
+					html += '<td>'+n.endDate+'</td>';
+					html += '<td>'+n.owner+'</td>';
+					html += '<td><a href="javascript:void(0);" onclick="unbund(\''+n.id+'\')"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+					html += '</tr>';
+
+				})
+
+				$("#clueActivityBody").html(html);
+
+			}
+		})
+
+	}
+
+	//为解除市场活动关系表
+	function unbund(id){
+
+		//根据id删除就可以了
+		$.ajax({
+			url:"workbench/clue/unbund.do",
+			data:{
+
+				"id":id
+
+			},
+			type:"get",
+			dataType:"json",
+			success:function (data){
+
+				if(data.success){
+
+					//解除成功,这个不像上面那个，这个只是一个tabel直接刷新就可以了
+					showActivityList();
+
+				}else {
+
+					alert("解除市场活动信息失败")
+				}
+
+			}
+		})
+
+	}
 
 	//为备注的添加绑定事件
 	function edtaRemark(id){
@@ -195,8 +366,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 	}
-
-
 
 	//为备注删除绑定事件
 	function deleteRemark(id){
@@ -229,6 +398,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	}
 
+
 	function showClueRemark(){
 
 		//跳到这个页面的时候就要刷新ajax查出备注信息
@@ -247,7 +417,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.each(data, function (i,n){
 
 					<!-- 备注1 -->
-					param += '<div class="remarkDiv" style="height: 60px;">';
+					param += '<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
 					param += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					param += '<div style="position: relative; top: -40px; left: 40px;" >';
 					param += '<h5 id="c'+n.id+'">'+n.noteContent+'</h5>';
@@ -255,7 +425,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					param += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
 					param += '<a class="myHref" href="javascript:void(0);" onclick="edtaRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '&nbsp;&nbsp;&nbsp;&nbsp;';
-					param += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')" ><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
+					param += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #ff0000;"></span></a>';
 					param += '</div>';
 					param += '</div>';
 					param += '</div>';
@@ -350,7 +520,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" id="aname" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -366,8 +536,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="caBody">
+							<%--<tr>
 								<td><input type="checkbox"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -380,13 +550,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" class="btn btn-primary" id="bundBtn" >关联</button>
 				</div>
 			</div>
 		</div>
@@ -713,8 +883,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="clueActivityBody">
+						<%--<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
@@ -727,7 +897,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>

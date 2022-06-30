@@ -31,4 +31,8 @@ public interface ClueService {
     boolean deleteRemark(String id);
 
     boolean updateClueRemark(ClueRemark clueRemark);
+
+    boolean unbund(String id);
+
+    boolean bund(String cid, String[] aid);
 }

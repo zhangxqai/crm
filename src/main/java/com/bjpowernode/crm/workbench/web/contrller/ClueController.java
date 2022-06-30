@@ -62,9 +62,80 @@ public class ClueController extends HttpServlet {
             deleteRemark(request,response);
         }else if ("/workbench/clue/updateClueRemark.do".equals(path)){
             updateClueRemark(request,response);
+        }else if ("/workbench/clue/getActivityListByClueId.do".equals(path)){
+            getActivityListByClueId(request,response);
+        }else if ("/workbench/clue/unbund.do".equals(path)){
+            unbund(request,response);
+        }else if ("/workbench/clue/getActivityListByNameAndByClueId.do".equals(path)){
+            getActivityListByNameAndByClueId(request,response);
+        }else if ("/workbench/clue/bund.do".equals(path)){
+            bund(request,response);
         }
 
 
+
+
+    }
+
+    private void bund(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("执行关联市场活动的操作");
+
+        String cid = request.getParameter("cid");
+        String[] aid = request.getParameterValues("aid");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.bund(cid,aid);
+
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void getActivityListByNameAndByClueId(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("查询市场活动列表（根据模糊市场活动名称查询列表）");
+
+        String aname = request.getParameter("aname");
+        String clueId = request.getParameter("clueId");
+
+        Map<String,String> map = new HashMap<>();
+        map.put("aname",aname);
+        map.put("clueId",clueId);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        List<Activity> activities = as.getActivityListByNameAndByClueId(map);
+
+        PrintJson.printJsonObj(response,activities);
+
+
+    }
+
+    private void unbund(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("执行解除关联操作");
+
+        String id = request.getParameter("id");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.unbund(id);
+
+        PrintJson.printJsonFlag(response,flag);
+
+    }
+
+    private void getActivityListByClueId(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("更新线索id查询关联市场活动的列表");
+
+        String clueId = request.getParameter("clueId");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        List<Activity> activity = as.getActivityListByClueId(clueId);
+
+        PrintJson.printJsonObj(response,activity);
 
     }
 
