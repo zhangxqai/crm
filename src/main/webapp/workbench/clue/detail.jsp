@@ -277,19 +277,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	});
 
+
 	//页面加载完毕之后显示市场活动
 	function showActivityList(){
 
 
 		//去掉全选按钮
+		$("#qx").prop("checked",false);
 
 
 		$.ajax({
 			url:"workbench/clue/getActivityListByClueId.do",
 			data:{
-
 				"clueId" : "${clue.id}"
-
 			},
 			type:"get",
 			dataType:"json",
@@ -438,6 +438,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			}
 		})
+
+
 	}
 </script>
 
@@ -518,7 +520,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-body">
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
-						<form class="form-inline" role="form">
+						<form class="form-inline" role="form" >
 						  <div class="form-group has-feedback">
 						    <input type="text" class="form-control" id="aname" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -528,7 +530,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+								<td><input type="checkbox" id="qx"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -596,7 +598,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                 <select class="form-control" id="edit-call">
                                     <option></option>
                                     <option selected>先生</option>
-                                    <option>夫人</option>
+                                    <option>夫人a</option>
                                     <option>女士</option>
                                     <option>博士</option>
                                     <option>教授</option>
@@ -729,7 +731,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<h3>${clue.fullname}${clue.appellation} <small>${clue.company}</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp?id=${clue.id}&fullname=${clue.fullname}&appellation=${clue.appellation}&company=${clue.company}&owner=${clue.owner}';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>

@@ -609,7 +609,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					data
 						[{线索一}，{线索二}]
 				* */
-					html = "";
+					var html = "";
 					/*<tr style="color: #B3B3B3;">
                                 <td><input type="checkbox" /></td>
                                 <td>名称</td>
@@ -623,15 +623,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					$.each(data.dataList,function (i,n){
 
 						html += '<tr class="active">';
-						html += '"<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
-						html += '"<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+n.id+'\';">'+n.fullname+'</a></td>';
-						html += '"<td>'+n.company+'</td>';
-						html += '"<td>'+n.phone+'</td>';
-						html += '"<td>'+n.mphone+'</td>';
-						html += '"<td>'+n.source+'</td>';
-						html += '"<td>'+n.owner+'</td>';
-						html += '"<td>'+n.state+'</td>';
-						html += '"</tr>';
+						html += '<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
+						html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+n.id+'\';">'+n.fullname+'</a></td>';
+						html += '<td>'+n.company+'</td>';
+						html += '<td>'+n.phone+'</td>';
+						html += '<td>'+n.mphone+'</td>';
+						html += '<td>'+n.source+'</td>';
+						html += '<td>'+n.owner+'</td>';
+						html += '<td>'+n.state+'</td>';
+						html += '</tr>';
 
 					})
 

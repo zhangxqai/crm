@@ -5,6 +5,19 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ClueRemarkDao">
 
+
+    <!--执行删除操作-->
+    <delete id="delete">
+
+        delete from tbl_clue_remark where id = #{id}
+
+    </delete>
+
+    <!--根据clueId查询出这条消息的备注getListById-->
+    <select id="getListById" resultType="ClueRemark">
+        select * from tbl_clue_remark where clueId = #{clueId}
+    </select>
+
     <!--为修改备注信息updateClueRemark-->
     <update id="updateClueRemark" >
 

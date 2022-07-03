@@ -5,6 +5,26 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ActivityDao">
 
+    <!--根据名称对市场活动的查询-->
+    <select id="getActivityListByName" resultType="Activity">
+
+        select
+
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+
+        from tbl_activity a
+                 join tbl_user u
+                      on a.owner = u.id
+
+        where a.name like concat('%',#{aname},'%')
+
+    </select>
+
+
     <!--关联市场活动的查询 getActivityListByNameAndByClueId-->
     <select id="getActivityListByNameAndByClueId" resultType="Activity">
 

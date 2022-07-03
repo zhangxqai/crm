@@ -1,16 +1,14 @@
-package com.bjpowernode.crm.workbench.web.contrller;
+package com.bjpowernode.crm.workbench.web.controller;
 
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.UserService;
 import com.bjpowernode.crm.settings.service.impl.UserServiceImpl;
 import com.bjpowernode.crm.util.*;
 import com.bjpowernode.crm.vo.PaginationVo;
-import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.Impl.ActivityServiceImpl;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

@@ -26,4 +26,8 @@ import java.util.Map;
     int getTotalListCount(Map<String, Object> map);
 
         int delete(String[] id);
+
+        Clue getById(String clueId);
+
+        int deleteClue(String clueId);
     }

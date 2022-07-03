@@ -4,7 +4,145 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.TranDao">
-	
+
+    <!--根据map查询出表中有多少条数据getAllCountTran-->
+    <select id="getAllCountTran" resultType="int">
+        select count(*)
+
+        from tbl_tran t
+        join tbl_customer c
+        on t.customerId = c.id
+        join tbl_user u
+        on u.id = t.owner
+        join tbl_contacts ct
+        on ct.id = t.contactsId
+        <where>
+            <if test="owner !=null and owner !=''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+            <if test="money !=null and money !=''">
+                and t.money like concat('%',#{money},'%')
+            </if>
+            <if test="name !=null and name !=''">
+                and t.name like concat('%',#{name},'%')
+            </if>
+            <if test="customerId !=null and customerId !=''">
+                and c.name like concat('%',#{customerId},'%')
+            </if>
+            <if test="stage !=null and stage !=''">
+                and t.stage like concat('%',#{stage},'%')
+            </if>
+            <if test="type !=null and type !=''">
+                and t.type like concat('%',#{type},'%')
+            </if>
+            <if test="source !=null and source !=''">
+                and t.source like concat('%',#{source},'%')
+            </if>
+            <if test="contactsId !=null and contactsId !=''">
+                and ct.fullname like concat('%',#{contactsId},'%')
+            </if>
+
+        </where>
+
+    </select>
+
+    <!--根据map查询出表中所有的信息，包括模糊查询-->
+    <select id="getAllTran" resultType="Tran">
+
+        select
+
+            t.id,
+            u.name as owner,
+            t.money,
+            t.name,
+            c.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            ct.fullname as contactsId
+
+        from tbl_tran t
+        join tbl_customer c
+        on t.customerId = c.id
+        join tbl_user u
+        on u.id = t.owner
+        join tbl_contacts ct
+        on ct.id = t.contactsId
+        <where>
+            <if test="owner !=null and owner !=''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+            <if test="money !=null and money !=''">
+                and t.money like concat('%',#{money},'%')
+            </if>
+            <if test="name !=null and name !=''">
+                and t.name like concat('%',#{name},'%')
+            </if>
+            <if test="customerId !=null and customerId !=''">
+                and c.name like concat('%',#{customerId},'%')
+            </if>
+            <if test="stage !=null and stage !=''">
+                and t.stage like concat('%',#{stage},'%')
+            </if>
+            <if test="type !=null and type !=''">
+                and t.type like concat('%',#{type},'%')
+            </if>
+            <if test="source !=null and source !=''">
+                and t.source like concat('%',#{source},'%')
+            </if>
+            <if test="contactsId !=null and contactsId !=''">
+                and ct.fullname like concat('%',#{contactsId},'%')
+            </if>
+
+        </where>
+        order by t.stage desc
+        limit #{skipCount},#{pageSize}
+
+    </select>
+
+    <!--添加交易save-->
+    <insert id="save">
+        insert into tbl_tran(
+
+            id,
+            owner,
+            money,
+            name,
+            expectedDate,
+            customerId,
+            stage,
+            type,
+            source,
+            activityId,
+            contactsId,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime
+
+
+        )values (
+
+            #{id},
+            #{owner},
+            #{money},
+            #{name},
+            #{expectedDate},
+            #{customerId},
+            #{stage},
+            #{type},
+            #{source},
+            #{activityId},
+            #{contactsId},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime}
+
+        )
+    </insert>
   	
 </mapper>
 
