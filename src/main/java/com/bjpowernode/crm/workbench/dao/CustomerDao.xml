@@ -5,6 +5,12 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.CustomerDao">
 
+    <!--根据名称模糊查询getCustomerName-->
+    <select id="getCustomerName" resultType="String">
+
+        select name from tbl_customer where name like concat('%',#{name},'%')
+
+    </select>
 
     <!--做添加操作save-->
     <insert id="save">

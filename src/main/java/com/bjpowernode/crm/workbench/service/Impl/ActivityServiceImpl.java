@@ -9,6 +9,7 @@ import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
 
 import com.bjpowernode.crm.workbench.domain.ActivityRemark;
+import com.bjpowernode.crm.workbench.domain.Contacts;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -197,10 +198,29 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public List<Activity> getAllActivity() {
+
+        List<Activity> activities = activityDao.getAllActivity();
+
+        return activities;
+    }
+
+    @Override
     public List<Activity> getActivityListByName(String aname) {
 
         List<Activity> activities = activityDao.getActivityListByName(aname);
 
         return activities;
     }
+
+    @Override
+    public List<Activity> getAllActivityByName(Activity activity) {
+
+        List<Activity> activities = activityDao.getAllActivityByName(activity);
+
+        return activities;
+    }
+
+
+
 }

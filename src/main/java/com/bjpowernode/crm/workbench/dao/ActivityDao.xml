@@ -5,6 +5,80 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ActivityDao">
 
+    <!--根据名字查询getAllActivityByName-->
+    <select id="getAllActivityByName" resultType="Activity">
+
+        select
+        a.id,
+        u.name as owner,
+        a.name,
+        a.startDate,
+        a.endDate
+
+        from tbl_activity a
+        join tbl_user u
+        on u.id = a.owner
+        <where>
+            <if test="name != null and name !=''">
+                and a.name like concat('%',#{name},'%')
+            </if>
+        </where>
+        order by a.createTime desc
+
+    </select>
+
+    <!--&lt;!&ndash;根据map查询出有多少条信息&ndash;&gt;
+    <select id="getAllActivityCount" resultType="int">
+        select count(*)
+        from tbl_activity a
+        join tbl_user u
+        on u.id = a.owner
+        &lt;!&ndash;<where>
+            <if test="owner != null and owner !=''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+        </where>&ndash;&gt;
+    </select>
+
+    &lt;!&ndash;在交易创建中的搜索市场活动中的列表getAllActivity&ndash;&gt;
+    <select id="getAllActivity" resultType="Activity">
+
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+
+        from tbl_activity a
+        join tbl_user u
+        on u.id = a.owner
+        <where>
+            <if test="owner != null and owner !=''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+        </where>&ndash;&gt;
+        order by a.createTime desc
+        limit #{skipCount},#{pageSize}
+    </select>-->
+    <!--在交易模块中找市场活动列表getAllActivity-->
+    <select id="getAllActivity" resultType="Activity">
+
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+
+        from tbl_activity a
+        join tbl_user u
+        on u.id = a.owner
+        order by a.createTime desc
+
+
+    </select>
+
     <!--根据名称对市场活动的查询-->
     <select id="getActivityListByName" resultType="Activity">
 

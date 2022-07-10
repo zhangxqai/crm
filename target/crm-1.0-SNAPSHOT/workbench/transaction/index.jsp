@@ -45,11 +45,73 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		//点开之后需要走后台查询交易表有多少条信息
 		showAllTransaction(1,3);
 
+		//为了查询做绑定事件
+		$("#getAllBtn").click(function (){
+
+			/*
+				在点及查询之后，将之前的信息保存到隐藏域中
+					<input type="hidden" id="hidden-owner">
+					<input type="hidden" id="hidden-name">
+					<input type="hidden" id="hidden-customerId">
+					<input type="hidden" id="hidden-type">
+					<input type="hidden" id="hidden-source">
+					<input type="hidden" id="hidden-contactsId">
+					<input type="hidden" id="hidden-stage">
+
+			*/
+
+			$("#hidden-owner").val($.trim($("#create-owner").val()));
+			$("#hidden-name").val($.trim($("#create-name").val()));
+			$("#hidden-customerId").val($.trim($("#create-customerId").val()));
+			$("#hidden-type").val($.trim($("#create-type").val()));
+			$("#hidden-source").val($.trim($("#create-source").val()));
+			$("#hidden-stage").val($.trim($("#create-stage").val()));
+			$("#hidden-contactsId").val($.trim($("#create-contactsId").val()));
+
+
+			showAllTransaction(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+		})
+
+		//为了全选框做绑定操作
+		$("#qx").click(function (){
+
+			$("input[name=xz]").prop("checked",this.checked);
+
+		})
+
+		//为了点击选框做取消全选框，绑定事件
+		$("#tranBody").on("click",$("input[name=xz]"),function (){
+
+			$("#qx").prop("checked",$("input[name=xz]").length == $("input[name=xz]:checked").length);
+
+		})
+
 
 	});
 
 	//查询全部交易的信息
 	function showAllTransaction(pageNo,pageSize){
+
+		/*
+			点击查询之后，要把隐藏域中的信息，先展示在前面
+			$("#hidden-owner").val($.trim($("#create-owner").val()));
+			$("#hidden-name").val($.trim($("#create-name").val()));
+			$("#hidden-customerId").val($.trim($("#create-customerId").val()));
+			$("#hidden-type").val($.trim($("#create-type").val()));
+			$("#hidden-source").val($.trim($("#create-source").val()));
+			$("#hidden-stage").val($.trim($("#create-stage").val()));
+			$("#hidden-contactsId").val($.trim($("#create-contactsId").val()));
+
+		*/
+
+		$("#create-owner").val($.trim($("#hidden-owner").val()));
+		$("#create-name").val($.trim($("#hidden-name").val()));
+		$("#create-customerId").val($.trim($("#hidden-customerId").val()));
+		$("#create-type").val($.trim($("#hidden-type").val()));
+		$("#create-source").val($.trim($("#hidden-source").val()));
+		$("#create-stage").val($.trim($("#hidden-stage").val()));
+		$("#create-contactsId").val($.trim($("#hidden-contactsId").val()));
 
 		$.ajax({
 			url:"workbench/transaction/getAllTran.do",
@@ -75,8 +137,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.each(data.dataList,function (i,n){
 
 					html += '<tr>';
-					html += '<td><input type="checkbox" /></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/transaction/detail.jsp\';">'+n.name+'</a></td>';
+					html += '<td><input type="checkbox" name="xz" id="'+n.id+'"/></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location,href=\'workbench/transaction/detail.do?id='+n.id+'\'">'+n.name+'</a></td>';
 					html += '<td>'+n.customerId+'</td>';
 					html += '<td>'+n.stage+'</td>';
 					html += '<td>'+n.type+'</td>';
@@ -124,7 +186,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </head>
 <body>
 
-	
+	<%--隐藏域:在这个页面上都是可以加上隐藏域的，因为都是在同一个页面上的 搜索列表不需要隐藏域的id的--%>
+	<input type="hidden" id="hidden-owner">
+	<input type="hidden" id="hidden-name">
+	<input type="hidden" id="hidden-customerId">
+	<input type="hidden" id="hidden-type">
+	<input type="hidden" id="hidden-source">
+	<input type="hidden" id="hidden-contactsId">
+	<input type="hidden" id="hidden-stage">
+
 	
 	<div>
 		<div style="position: relative; left: 10px; top: -10px;">
@@ -139,8 +209,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div style="width: 100%; position: absolute;top: 5px; left: 10px;">
 		
 			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
+
+				<%--表单--%>
 				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
-				  
+
+
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
@@ -199,9 +272,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				      <div class="input-group-addon">来源</div>
 				      <select class="form-control" id="create-source">
 						  <option></option>
-						  <c:forEach items="${sourceList}" var="s">
+						  <c:forEach items="${sourceList}" var="sc">
 
-							  <option value="${s.value}">${s.text}</option>
+							  <option value="${sc.value}">${sc.text}</option>
 
 						  </c:forEach>
 						</select>
@@ -221,7 +294,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 10px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/save.jsp';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/add.do';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" onclick="window.location.href='edit.html';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>

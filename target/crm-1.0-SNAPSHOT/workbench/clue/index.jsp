@@ -305,6 +305,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							//刷新完了之后就要关闭窗口
 							$("#createClueModal").modal("hide");
 
+							$("#clueAddForm")[0].reset();
+
 						}else {
 
 							//添加失败
@@ -726,6 +728,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	<!-- 创建线索的模态窗口 -->
 	<div class="modal fade" id="createClueModal" role="dialog">
+
 		<div class="modal-dialog" role="document" style="width: 90%;">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -735,7 +738,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<h4 class="modal-title" id="myModalLabel">创建线索</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" id="clueAddForm">
 					
 						<div class="form-group">
 							<label for="create-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>

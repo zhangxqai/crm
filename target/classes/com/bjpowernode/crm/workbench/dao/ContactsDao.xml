@@ -5,6 +5,19 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.ContactsDao">
 
+    <!--查询联系人getContactsByName-->
+    <select id="getContactsByName" resultType="Contacts">
+
+        select
+            id,
+            fullname,
+            email,
+            mphone
+        from tbl_contacts
+        where fullname like concat('%',#{fullname},'%')
+
+    </select>
+
     <!--添加联系人-->
     <insert id="save">
         insert into tbl_contacts(

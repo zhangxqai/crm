@@ -12,4 +12,12 @@ public interface TranDao {
     List<Tran> getAllTran(Map<String, Object> map);
 
     int getAllCountTran(Map<String, Object> map);
+
+    Tran detail(String id);
+
+    int changeStage(Tran t);
+
+    int getTotal();
+
+    List<Map<String, Object>> getCharts();
 }

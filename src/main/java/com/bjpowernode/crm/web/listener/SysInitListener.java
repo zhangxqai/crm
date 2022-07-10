@@ -8,9 +8,7 @@ import com.bjpowernode.crm.util.ServiceFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SysInitListener implements ServletContextListener {
 
@@ -55,6 +53,34 @@ public class SysInitListener implements ServletContextListener {
         }
 
         System.out.println("服务器缓存处理数据字典结束");
+
+        //数据字典处理完之后，就要处理Stage2Possibility.properties文件
+        //  解析该文件，将这个文件中的键值对关系处理成java中的键值对关系
+        //  先创建Map集合  Map<String , String> map = new HashMap<>();
+        //      map.put("01资质审查"，10)；
+        //      map.put("02需求分析"，20)；
+        //      map.put("02需求分析"，20)；
+        //      map.put("01资质审查"，10)；
+        //      将map保存搭配application中，放到服务器缓存中
+
+        Map<String,String> pMap = new HashMap<>();
+
+        ResourceBundle rc = ResourceBundle.getBundle("Stage2Possibility");
+        Enumeration<String> e = rc.getKeys();
+
+        while (e.hasMoreElements()){
+
+            //阶段
+            String key = e.nextElement();
+            //可能性
+            String value = rc.getString(key);
+
+            pMap.put(key,value);
+
+        }
+
+        //将这个信息存到application中
+        application.setAttribute("pMap",pMap);
 
     }
 }

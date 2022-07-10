@@ -5,6 +5,65 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.TranDao">
 
+    <select id="getCharts" resultType="map">
+
+        select
+            count(*) as value, stage as name
+        from tbl_tran
+        group by stage
+
+    </select>
+
+
+    <select id="getTotal" resultType="int">
+
+        select count(*) from tbl_tran
+
+    </select>
+
+    <!--修改操作changeStage-->
+    <update id="changeStage">
+
+        update tbl_tran set stage=#{stage},editBy=#{editBy},editTime=#{editTime}
+        where id =#{id}
+
+    </update>
+
+    <!--根据id查询表中的单条数据-->
+    <select id="detail" resultType="Tran">
+        select
+            tran.id,
+            user.name as owner,
+            tran.money,
+            tran.name,
+            tran.expectedDate,
+            cus.name as customerId,
+            tran.stage,
+            tran.type,
+            tran.source,
+            act.name as activityId,
+            con.fullname as contactsId,
+            tran.createBy,
+            tran.createTime,
+            tran.editBy,
+            tran.editTime,
+            tran.description,
+            tran.contactSummary,
+            tran.nextContactTime
+
+        from tbl_tran tran
+        join tbl_user user
+        on user.id = tran.owner
+        join tbl_customer cus
+        on tran.customerId = cus.id
+        left join tbl_activity act
+        on tran.activityId = act.id
+        left join tbl_contacts con
+        on tran.contactsId = con.id
+
+        where tran.id = #{id}
+    </select>
+    
     <!--根据map查询出表中有多少条数据getAllCountTran-->
     <select id="getAllCountTran" resultType="int">
         select count(*)
